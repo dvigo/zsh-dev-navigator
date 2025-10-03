@@ -1,7 +1,7 @@
 # zsh-dev-navigator
 
 A minimal **Zsh plugin** that lets you quickly jump into your development directories with a single command.  
-`dev` acts as a smart replacement for `cd`, allowing you to navigate into project folders instantly with **recursive autocompletion**.
+`dev` acts as a smart replacement for `cd`, allowing you to navigate into project folders instantly with **recursive autocompletion** — and even open them directly in **VS Code**.
 
 ---
 
@@ -9,7 +9,14 @@ A minimal **Zsh plugin** that lets you quickly jump into your development direct
 
 ```bash
 dev api-server
-# → cd ~/Development/api-server
+# → cd ~/dev/api-server
+```
+
+Or open the project in VS Code:
+
+```bash
+dev -o api-server
+# → Opens ~/dev/api-server in VS Code
 ```
 
 ---
@@ -19,7 +26,8 @@ dev api-server
 - ⚡ Quickly `cd` into any development project with a simple command.  
 - 📁 Smart **recursive autocompletion** for subfolders.  
 - 🧭 Defaults to your base development folder when no argument is provided.  
-- 🪄 Minimal and lightning-fast — perfect for daily workflows.
+- 🪄 Optional **flags** to extend functionality — e.g., open projects directly in **VS Code**.  
+- ⚙️ Configurable base directory via an environment variable.  
 
 ---
 
@@ -56,7 +64,7 @@ dev api-server
 
 **Result:**  
 ```
-📂 Moved to: ~/Development/api-server
+📂 Moved to: ~/dev/api-server
 ```
 
 **Autocompletion:**  
@@ -69,20 +77,29 @@ dev fr<TAB>
 # frontend-tests
 ```
 
+**Open in VS Code:**  
+```bash
+dev -o frontend-app
+# → Opens ~/dev/frontend-app in VS Code and navigates to it
+```
+
 ---
 
 ## ⚙️ Configuration
 
-Inside the plugin file, set the base directory where all your projects live:
+By default, the plugin uses:
 
 ```bash
-DEV_BASE_DIR="$HOME/Development"
+DEV_BASE_DIR="${ZSH_DEV_NAVIGATOR_DIR:-$HOME/dev}"
 ```
 
-Change this to match your setup, for example:
+- If `$ZSH_DEV_NAVIGATOR_DIR` is set, that path will be used as the base projects folder.
+- Otherwise, it defaults to `$HOME/dev`.
+
+You can change this in your `~/.zshrc`:
 
 ```bash
-DEV_BASE_DIR="$HOME/dev"
+export ZSH_DEV_NAVIGATOR_DIR="$HOME/Development"
 ```
 
 ---
@@ -99,13 +116,20 @@ Examples:
 
 ```bash
 dev dashboard-ui
-# → cd ~/Development/dashboard-ui
+# → cd ~/dev/dashboard-ui
 
 dev api-server/routes
-# → cd ~/Development/api-server/routes
+# → cd ~/dev/api-server/routes
 
 dev
-# → cd ~/Development
+# → cd ~/dev
+```
+
+Open a project in VS Code:
+
+```bash
+dev -o api-server
+# → Opens the project in VS Code and navigates to it
 ```
 
 ---
@@ -120,8 +144,9 @@ Just type part of a project name and press `<TAB>` to complete it.
 
 ## 🔧 Roadmap
 
-- [ ] Add optional flags for editor integration (VS Code, JetBrains, etc.).
-- [ ] Add fuzzy search for project names.
+- [x] Add flag to open projects directly in VS Code.  
+- [ ] Add support for more editors (JetBrains, Sublime, etc.).  
+- [ ] Add fuzzy search for project names.  
 - [ ] Add aliases or shortcuts per project.
 
 ---

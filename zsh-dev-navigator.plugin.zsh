@@ -1,28 +1,63 @@
 DEV_BASE_DIR="${ZSH_DEV_NAVIGATOR_DIR:-$HOME/dev}"
 
 dev() {
-  if [ -z "$1" ]; then
-    cd "$DEV_BASE_DIR" || return 1
-    return 0
-  fi
+    local open_in_vscode=false
+    local project_name=""
+    
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -o|--open)
+                open_in_vscode=true
+                shift
+                ;;
+            *)
+                project_name="$1"
+                shift
+                ;;
+        esac
+    done
 
-  local target_dir="$DEV_BASE_DIR/$1"
+    if [ -z "$project_name" ]; then
+        local target_dir="$DEV_BASE_DIR"
+    else
+        local target_dir="$DEV_BASE_DIR/$project_name"
+    fi
 
-  if [ -d "$target_dir" ]; then
-    cd "$target_dir" || return 1
-  else
-    echo "Project not found: $target_dir" >&2
-    return 1
-  fi
+    if [ ! -d "$target_dir" ]; then
+        echo "Project not found: $target_dir" >&2
+        return 1
+    fi
+
+    if [ "$open_in_vscode" = true ]; then
+        if command -v code >/dev/null 2>&1; then
+            code "$target_dir"
+            echo "Opened in VS Code: $target_dir"
+        else
+            echo "VS Code (code command) not found." >&2
+            return 1
+        fi
+    else
+        cd "$target_dir" || return 1
+    fi
 }
 
 _dev_completions() {
-  local -a project_dirs
-  if [[ -d "$DEV_BASE_DIR" ]]; then
-    project_dirs=("$DEV_BASE_DIR"/*(N/))
-    local -a project_names=("${(@)project_dirs:t}")
-    _describe 'projects' project_names
-  fi
+  local context state line
+  local -a options project_dirs project_names
+  
+  _arguments -C \
+    '(-o --open)'{-o,--open}'[Open directory in VS Code]' \
+    '*:project:->projects' && return 0
+  
+  case $state in
+    projects)
+      if [[ -d "$DEV_BASE_DIR" ]]; then
+        project_dirs=("$DEV_BASE_DIR"/*(N/))
+        project_names=("${(@)project_dirs:t}")
+        _describe 'projects' project_names
+      fi
+      ;;
+  esac
 }
 
 compdef _dev_completions dev
