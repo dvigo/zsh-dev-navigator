@@ -18,6 +18,17 @@ dev() {
     done
 
     if [ -z "$project_name" ]; then
+        if [[ -d "$DEV_BASE_DIR" ]]; then
+            if command -v fzf >/dev/null 2>&1; then
+                project_name=$(ls -1 "$DEV_BASE_DIR" | fzf --height 40% --border --prompt="Select project: ")
+            fi
+        else
+            echo "DEV base directory not found: $DEV_BASE_DIR" >&2
+            return 1
+        fi
+    fi
+
+    if [ -z "$project_name" ]; then
         local target_dir="$DEV_BASE_DIR"
     else
         local target_dir="$DEV_BASE_DIR/$project_name"
