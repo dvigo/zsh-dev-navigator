@@ -38,7 +38,7 @@ dev -o api-server
 1. Clone the plugin into your Oh My Zsh custom plugins folder:
 
    ```bash
-   git clone https://github.com/youruser/zsh-dev-navigator.git ~/.oh-my-zsh/custom/plugins/zsh-dev-navigator
+   git clone https://github.com/dvigo/zsh-dev-navigator.git ~/.oh-my-zsh/custom/plugins/zsh-dev-navigator
    ```
 
 2. Enable it in your `~/.zshrc`:
