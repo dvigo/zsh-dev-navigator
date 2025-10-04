@@ -1,0 +1,13 @@
+# ZSH Dev Navigator Configuration Example
+# Copy this file to ~/.config/zsh-dev-navigator/config and customize it
+
+# Development directory - where your projects are located
+# This can be an absolute path or use ~ for home directory
+dev_directory = ~/dev
+
+# Default editor to use with the -o flag
+# Supported editors: code, cursor, windsurf, subl, vim, nvim, emacs, atom, webstorm, idea, pycharm
+editor = code
+
+# You can also specify custom editors with full paths
+# editor = /usr/local/bin/my-custom-editor

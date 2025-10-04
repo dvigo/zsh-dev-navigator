@@ -1,14 +1,18 @@
-DEV_BASE_DIR="${ZSH_DEV_NAVIGATOR_DIR:-$HOME/dev}"
+PLUGIN_DIR="${0:A:h}"
+DEV_CONFIG_FILE="$PLUGIN_DIR/config"
+
+DEV_BASE_DIR=$(grep -E '^\s*dev_directory\s*=' "$DEV_CONFIG_FILE" | cut -d '=' -f2- | xargs | sed "s|~|$HOME|")
+EDITOR_CMD=$(grep -E '^\s*editor\s*=' "$DEV_CONFIG_FILE" | cut -d '=' -f2- | xargs)
 
 dev() {
-    local open_in_vscode=false
+    local open_in_editor=false
     local create_directory=false
     local project_name=""
 
     while [[ $# -gt 0 ]]; do
         case $1 in
             -o|--open)
-                open_in_vscode=true
+                open_in_editor=true
                 shift
                 ;;
             -c|--create)
@@ -33,34 +37,29 @@ dev() {
         fi
     fi
 
+    local target_dir
     if [ -z "$project_name" ]; then
-        local target_dir="$DEV_BASE_DIR"
+        target_dir="$DEV_BASE_DIR"
     else
-        local target_dir="$DEV_BASE_DIR/$project_name"
+        target_dir="$DEV_BASE_DIR/$project_name"
     fi
 
     if [ ! -d "$target_dir" ]; then
         if [ "$create_directory" = true ]; then
             echo "Creating new project directory: $target_dir"
-            mkdir -p "$target_dir"
-            if [ $? -ne 0 ]; then
+            mkdir -p "$target_dir" || {
                 echo "Failed to create directory: $target_dir" >&2
                 return 1
-            fi
+            }
         else
             echo "Project not found: $target_dir" >&2
             return 1
         fi
     fi
 
-    if [ "$open_in_vscode" = true ]; then
-        if command -v code >/dev/null 2>&1; then
-            code "$target_dir"
-            echo "Opened in VS Code: $target_dir"
-        else
-            echo "VS Code (code command) not found." >&2
-            return 1
-        fi
+    if [ "$open_in_editor" = true ]; then
+        "$EDITOR_CMD" "$target_dir"
+        echo "Opened in $EDITOR_CMD: $target_dir"
     else
         cd "$target_dir" || return 1
     fi
@@ -71,7 +70,7 @@ _dev_completions() {
     local -a options project_dirs project_names
 
     _arguments -C \
-        '(-o --open)'{-o,--open}'[Open directory in VS Code]' \
+        '(-o --open)'{-o,--open}'[Open directory in default editor]' \
         '(-c --create)'{-c,--create}'[Create directory if it does not exist]' \
         '*:project:->projects' && return 0
 
