@@ -19,6 +19,13 @@ dev -o api-server
 # → Opens ~/dev/api-server in VS Code
 ```
 
+Create a new project directory:
+
+```bash
+dev -c new-project
+# → Creates ~/dev/new-project and navigates to it
+```
+
 ---
 
 ## ✨ Features
@@ -27,6 +34,7 @@ dev -o api-server
 - 📁 Smart **recursive autocompletion** for subfolders.  
 - 🧭 Defaults to your base development folder when no argument is provided.  
 - 🪄 Optional **flags** to extend functionality — e.g., open projects directly in **VS Code**.  
+- 🆕 **Create new project directories** on-the-fly with the `-c` flag.  
 - ⚙️ Configurable base directory via an environment variable.  
 
 ---
@@ -83,6 +91,12 @@ dev -o frontend-app
 # → Opens ~/dev/frontend-app in VS Code and navigates to it
 ```
 
+**Create new project:**  
+```bash
+dev -c new-project
+# → Creates ~/dev/new-project and navigates to it
+```
+
 ---
 
 ## ⚙️ Configuration
@@ -132,6 +146,20 @@ dev -o api-server
 # → Opens the project in VS Code and navigates to it
 ```
 
+Create a new project directory:
+
+```bash
+dev -c new-project
+# → Creates ~/dev/new-project and navigates to it
+```
+
+Combine flags:
+
+```bash
+dev -c -o new-app
+# → Creates ~/dev/new-app and opens it in VS Code
+```
+
 ---
 
 ## 📌 Autocompletion
@@ -144,6 +172,7 @@ Just type part of a project name and press `<TAB>` to complete it.
 
 ## 🔧 Roadmap
 
+- [x] Add flag to create new project directories.  
 - [x] Add flag to open projects directly in VS Code.  
 - [ ] Add support for more editors (JetBrains, Sublime, etc.).  
 - [x] Add fuzzy search for project names.  
