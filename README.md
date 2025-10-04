@@ -146,7 +146,7 @@ Just type part of a project name and press `<TAB>` to complete it.
 
 - [x] Add flag to open projects directly in VS Code.  
 - [ ] Add support for more editors (JetBrains, Sublime, etc.).  
-- [ ] Add fuzzy search for project names.  
+- [x] Add fuzzy search for project names.  
 - [ ] Add aliases or shortcuts per project.
 
 ---
