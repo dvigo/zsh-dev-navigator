@@ -12,11 +12,11 @@ dev api-server
 # → cd ~/dev/api-server
 ```
 
-Or open the project in VS Code:
+Or open the project in your configured editor:
 
 ```bash
 dev -o api-server
-# → Opens ~/dev/api-server in VS Code
+# → Opens ~/dev/api-server in your configured editor (default: VS Code)
 ```
 
 Create a new project directory:
@@ -33,9 +33,11 @@ dev -c new-project
 - ⚡ Quickly `cd` into any development project with a simple command.  
 - 📁 Smart **recursive autocompletion** for subfolders.  
 - 🧭 Defaults to your base development folder when no argument is provided.  
-- 🪄 Optional **flags** to extend functionality — e.g., open projects directly in **VS Code**.  
+- 🪄 Optional **flags** to extend functionality — e.g., open projects directly in your **preferred editor**.  
 - 🆕 **Create new project directories** on-the-fly with the `-c` flag.  
-- ⚙️ Configurable base directory via an environment variable.  
+- ⚙️ **Configurable** base directory and default editor via configuration file.  
+- 🔍 **Fuzzy finder integration** (fzf) for interactive project selection when no argument is provided.  
+- 🎯 Support for **multiple editors**: VS Code, Cursor, Windsurf, Sublime Text, Vim, and more.  
 
 ---
 
@@ -85,10 +87,17 @@ dev fr<TAB>
 # frontend-tests
 ```
 
-**Open in VS Code:**  
+**Open in your preferred editor:**  
 ```bash
 dev -o frontend-app
-# → Opens ~/dev/frontend-app in VS Code and navigates to it
+# → Opens ~/dev/frontend-app in your configured editor (e.g., Cursor, VS Code, etc.)
+```
+
+**Interactive project selection with fuzzy finder:**  
+```bash
+dev
+# → Opens fzf interface to select from available projects
+# → Press ESC to navigate to the root dev folder
 ```
 
 **Create new project:**  
@@ -101,20 +110,44 @@ dev -c new-project
 
 ## ⚙️ Configuration
 
-By default, the plugin uses:
+The plugin uses a configuration file located in the plugin directory. You can customize the following settings:
+
+### Configuration File
+
+The plugin includes a `config` file with the following options:
 
 ```bash
-DEV_BASE_DIR="${ZSH_DEV_NAVIGATOR_DIR:-$HOME/dev}"
+# Development directory - where your projects are located
+# This can be an absolute path or use ~ for home directory
+dev_directory = ~/dev
+
+# Default editor to use with the -o flag
+# Supported editors: code, cursor, windsurf, subl, vim, nvim, emacs, atom, webstorm, idea, pycharm
+editor = code
 ```
 
-- If `$ZSH_DEV_NAVIGATOR_DIR` is set, that path will be used as the base projects folder.
-- Otherwise, it defaults to `$HOME/dev`.
+### Customizing Settings
 
-You can change this in your `~/.zshrc`:
+1. **Development Directory**: Change the `dev_directory` setting to point to your projects folder:
+   ```bash
+   dev_directory = ~/Development
+   dev_directory = /path/to/your/projects
+   ```
 
-```bash
-export ZSH_DEV_NAVIGATOR_DIR="$HOME/Development"
-```
+2. **Default Editor**: Set your preferred editor for the `-o` flag:
+   ```bash
+   editor = cursor        # Cursor editor
+   editor = windsurf      # Windsurf editor  
+   editor = code          # VS Code
+   editor = subl          # Sublime Text
+   editor = vim           # Vim
+   editor = nvim          # Neovim
+   ```
+
+3. **Custom Editor Path**: You can also specify a full path to a custom editor:
+   ```bash
+   editor = /usr/local/bin/my-custom-editor
+   ```
 
 ---
 
@@ -139,11 +172,11 @@ dev
 # → cd ~/dev
 ```
 
-Open a project in VS Code:
+Open a project in your configured editor:
 
 ```bash
 dev -o api-server
-# → Opens the project in VS Code and navigates to it
+# → Opens the project in your configured editor (Cursor, VS Code, etc.)
 ```
 
 Create a new project directory:
@@ -157,7 +190,7 @@ Combine flags:
 
 ```bash
 dev -c -o new-app
-# → Creates ~/dev/new-app and opens it in VS Code
+# → Creates ~/dev/new-app and opens it in your configured editor
 ```
 
 ---
@@ -168,15 +201,28 @@ The `dev` command includes powerful autocompletion for all subdirectories inside
 
 Just type part of a project name and press `<TAB>` to complete it.
 
+## 🔍 Fuzzy Finder Integration
+
+When you run `dev` without any arguments, the plugin will automatically launch **fzf** (if installed) to provide an interactive project selection interface:
+
+- Browse through all your projects with fuzzy search
+- Use arrow keys or type to filter projects
+- Press **Enter** to navigate to the selected project
+- Press **ESC** to navigate to the root development folder instead
+
+**Note**: This feature requires [fzf](https://github.com/junegunn/fzf) to be installed. If fzf is not available, the command will simply navigate to your base development directory.
+
 ---
 
 ## 🔧 Roadmap
 
 - [x] Add flag to create new project directories.  
-- [x] Add flag to open projects directly in VS Code.  
-- [ ] Add support for more editors (JetBrains, Sublime, etc.).  
-- [x] Add fuzzy search for project names.  
-- [ ] Add aliases or shortcuts per project.
+- [x] Add flag to open projects directly in editors.  
+- [x] Add support for multiple editors (VS Code, Cursor, Windsurf, Sublime, Vim, etc.).  
+- [x] Add fuzzy search for project names with fzf integration.  
+- [x] Add configuration file system for customizable settings.  
+- [ ] Add aliases or shortcuts per project.  
+- [ ] Add project templates for new directory creation.  
 
 ---
 
