@@ -7,6 +7,7 @@ EDITOR_CMD=$(grep -E '^\s*editor\s*=' "$DEV_CONFIG_FILE" | cut -d '=' -f2- | xar
 dev() {
     local open_in_editor=false
     local create_directory=false
+    local git_init=false
     local project_name=""
 
     while [[ $# -gt 0 ]]; do
@@ -17,6 +18,11 @@ dev() {
                 ;;
             -c|--create)
                 create_directory=true
+                shift
+                ;;
+            -cg|--create-git)
+                create_directory=true
+                git_init=true
                 shift
                 ;;
             *)
@@ -51,6 +57,14 @@ dev() {
                 echo "Failed to create directory: $target_dir" >&2
                 return 1
             }
+            
+            # Initialize git repository if -cg flag was used
+            if [ "$git_init" = true ]; then
+                echo "Initializing git repository..."
+                (cd "$target_dir" && git init) || {
+                    echo "Warning: Failed to initialize git repository" >&2
+                }
+            fi
         else
             echo "Project not found: $target_dir" >&2
             return 1
@@ -72,6 +86,7 @@ _dev_completions() {
     _arguments -C \
         '(-o --open)'{-o,--open}'[Open directory in default editor]' \
         '(-c --create)'{-c,--create}'[Create directory if it does not exist]' \
+        '(-cg --create-git)'{-cg,--create-git}'[Create directory and initialize git repository]' \
         '*:project:->projects' && return 0
 
     case $state in
