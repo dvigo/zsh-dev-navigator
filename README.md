@@ -26,6 +26,13 @@ dev -c new-project
 # → Creates ~/dev/new-project and navigates to it
 ```
 
+Create a new project with git repository:
+
+```bash
+dev -cg new-project
+# → Creates ~/dev/new-project, initializes git, and navigates to it
+```
+
 ---
 
 ## ✨ Features
@@ -34,7 +41,8 @@ dev -c new-project
 - 📁 Smart **recursive autocompletion** for subfolders.  
 - 🧭 Defaults to your base development folder when no argument is provided.  
 - 🪄 Optional **flags** to extend functionality — e.g., open projects directly in your **preferred editor**.  
-- 🆕 **Create new project directories** on-the-fly with the `-c` flag.  
+- 🆕 **Create new project directories** on-the-fly with the `-c` flag.
+- 🔧 **Initialize git repositories** automatically with the `-cg` flag.  
 - ⚙️ **Configurable** base directory and default editor via configuration file.  
 - 🔍 **Fuzzy finder integration** (fzf) for interactive project selection when no argument is provided.  
 - 🎯 Support for **multiple editors**: VS Code, Cursor, Windsurf, Sublime Text, Vim, and more.  
@@ -104,6 +112,12 @@ dev
 ```bash
 dev -c new-project
 # → Creates ~/dev/new-project and navigates to it
+```
+
+**Create new project with git:**  
+```bash
+dev -cg new-project
+# → Creates ~/dev/new-project, initializes git, and navigates to it
 ```
 
 ---
@@ -186,11 +200,21 @@ dev -c new-project
 # → Creates ~/dev/new-project and navigates to it
 ```
 
+Create a new project with git repository:
+
+```bash
+dev -cg new-project
+# → Creates ~/dev/new-project, initializes git, and navigates to it
+```
+
 Combine flags:
 
 ```bash
 dev -c -o new-app
 # → Creates ~/dev/new-app and opens it in your configured editor
+
+dev -cg -o new-git-project
+# → Creates ~/dev/new-git-project, initializes git, and opens it in your editor
 ```
 
 ---
