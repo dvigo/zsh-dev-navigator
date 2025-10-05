@@ -9,5 +9,9 @@ dev_directory = ~/dev
 # Supported editors: code, cursor, windsurf, subl, vim, nvim, emacs, atom, webstorm, idea, pycharm
 editor = code
 
+# Automatically initialize git repository when creating new directories with -c flag
+# Set to true to enable automatic git init, false to disable
+auto_git_init = false
+
 # You can also specify custom editors with full paths
 # editor = /usr/local/bin/my-custom-editor

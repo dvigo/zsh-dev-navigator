@@ -3,6 +3,7 @@ DEV_CONFIG_FILE="$PLUGIN_DIR/config"
 
 DEV_BASE_DIR=$(grep -E '^\s*dev_directory\s*=' "$DEV_CONFIG_FILE" | cut -d '=' -f2- | xargs | sed "s|~|$HOME|")
 EDITOR_CMD=$(grep -E '^\s*editor\s*=' "$DEV_CONFIG_FILE" | cut -d '=' -f2- | xargs)
+AUTO_GIT_INIT=$(grep -E '^\s*auto_git_init\s*=' "$DEV_CONFIG_FILE" | cut -d '=' -f2- | xargs)
 
 dev() {
     local open_in_editor=false
@@ -58,8 +59,8 @@ dev() {
                 return 1
             }
             
-            # Initialize git repository if -cg flag was used
-            if [ "$git_init" = true ]; then
+            # Initialize git repository if -cg flag was used OR if auto_git_init is enabled
+            if [ "$git_init" = true ] || [ "$AUTO_GIT_INIT" = "true" ]; then
                 echo "Initializing git repository..."
                 (cd "$target_dir" && git init) || {
                     echo "Warning: Failed to initialize git repository" >&2
