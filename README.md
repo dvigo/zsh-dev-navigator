@@ -44,6 +44,7 @@ dev -cg new-project
 - 🆕 **Create new project directories** on-the-fly with the `-c` flag.
 - 🔧 **Initialize git repositories** automatically with the `-cg` flag.  
 - ⚙️ **Configurable** base directory and default editor via configuration file.  
+- 🤖 **Auto git init** option to initialize git repositories with `-c` flag automatically.  
 - 🔍 **Fuzzy finder integration** (fzf) for interactive project selection when no argument is provided.  
 - 🎯 Support for **multiple editors**: VS Code, Cursor, Windsurf, Sublime Text, Vim, and more.  
 
@@ -138,6 +139,10 @@ dev_directory = ~/dev
 # Default editor to use with the -o flag
 # Supported editors: code, cursor, windsurf, subl, vim, nvim, emacs, atom, webstorm, idea, pycharm
 editor = code
+
+# Automatically initialize git repository when creating new directories with -c flag
+# Set to true to enable automatic git init, false to disable
+auto_git_init = false
 ```
 
 ### Customizing Settings
@@ -161,6 +166,12 @@ editor = code
 3. **Custom Editor Path**: You can also specify a full path to a custom editor:
    ```bash
    editor = /usr/local/bin/my-custom-editor
+   ```
+
+4. **Automatic Git Initialization**: Enable automatic `git init` when creating directories with `-c`:
+   ```bash
+   auto_git_init = true   # Always initialize git with -c flag
+   auto_git_init = false  # Only initialize git with -cg flag (default)
    ```
 
 ---
@@ -206,6 +217,8 @@ Create a new project with git repository:
 dev -cg new-project
 # → Creates ~/dev/new-project, initializes git, and navigates to it
 ```
+
+**Note**: If you have `auto_git_init = true` in your config, then `dev -c new-project` will also initialize git automatically.
 
 Combine flags:
 
