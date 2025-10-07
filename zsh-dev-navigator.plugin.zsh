@@ -75,6 +75,7 @@ dev() {
     if [ "$open_in_editor" = true ]; then
         "$EDITOR_CMD" "$target_dir"
         echo "Opened in $EDITOR_CMD: $target_dir"
+        cd "$target_dir" || return 1
     else
         cd "$target_dir" || return 1
     fi
