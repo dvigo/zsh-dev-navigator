@@ -95,6 +95,17 @@ echo "Current directory: $(pwd)"
 EOF
 chmod +x "$TEST_DIR/test-script.sh"
 
+# Create test script that accepts arguments
+cat > "$TEST_DIR/test-args.sh" << 'EOF'
+#!/bin/bash
+echo "Script executed with arguments"
+echo "Total arguments: $#"
+for arg in "$@"; do
+    echo "Arg: $arg"
+done
+EOF
+chmod +x "$TEST_DIR/test-args.sh"
+
 # Create test files
 cat > "$TEST_DIR/config.json" << 'EOF'
 {"name": "test-config", "version": "1.0.0"}
@@ -180,6 +191,30 @@ test_file_handling() {
         print_success "New file creation with -o flag works"
     else
         print_failure "New file creation with -o flag failed"
+    fi
+    
+    print_test "File execution with arguments"
+    local output=$(echo "y" | dev test-args.sh -ac --verbose 2>/dev/null)
+    if echo "$output" | grep -q "Script executed with arguments" && \
+       echo "$output" | grep -q "Total arguments: 2" && \
+       echo "$output" | grep -q "Arg: -ac" && \
+       echo "$output" | grep -q "Arg: --verbose"; then
+        print_success "File execution with arguments works"
+    else
+        print_failure "File execution with arguments failed"
+    fi
+    
+    print_test "File execution with interactive argument input"
+    local output=$(printf "y\n-x --test\n" | dev test-args.sh 2>/dev/null)
+    if echo "$output" | grep -q "Enter arguments" && \
+       echo "$output" | grep -q "Executing with arguments: -x --test" && \
+       echo "$output" | grep -q "Script executed with arguments" && \
+       echo "$output" | grep -q "Total arguments: 2" && \
+       echo "$output" | grep -q "Arg: -x" && \
+       echo "$output" | grep -q "Arg: --test"; then
+        print_success "Interactive argument input works"
+    else
+        print_failure "Interactive argument input failed"
     fi
 }
 

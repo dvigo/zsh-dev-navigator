@@ -24,6 +24,8 @@ The `quick_test.sh` script provides comprehensive testing for all plugin functio
 - ✅ File execution cancellation
 - ✅ File opening in editor with `-o` flag
 - ✅ New file creation with `-o` flag
+- ✅ File execution with arguments (flags and parameters)
+- ✅ Interactive argument input (prompts for arguments if not provided)
 
 ### 3. **Directory Creation Tests**
 - ✅ Create directories with `-c` flag

@@ -10,6 +10,7 @@ dev() {
     local create_directory=false
     local git_init=false
     local project_name=""
+    local extra_args=()
 
     while [[ $# -gt 0 ]]; do
         case $1 in
@@ -27,7 +28,11 @@ dev() {
                 shift
                 ;;
             *)
-                project_name="$1"
+                if [ -z "$project_name" ]; then
+                    project_name="$1"
+                else
+                    extra_args+=("$1")
+                fi
                 shift
                 ;;
         esac
@@ -86,11 +91,24 @@ dev() {
         else
             # Ask for confirmation before executing file
             echo "Target is a file: $target_dir"
+            if [ ${#extra_args[@]} -gt 0 ]; then
+                echo "With arguments: ${extra_args[*]}"
+            fi
             echo -n "Do you want to execute this file? [y/N]: "
             read -r response
             if [[ "$response" =~ ^[Yy]$ ]]; then
+                # Ask for arguments if none were provided
+                if [ ${#extra_args[@]} -eq 0 ]; then
+                    echo -n "Enter arguments (or press Enter for none): "
+                    read -r user_args
+                    if [ -n "$user_args" ]; then
+                        # Split user input into array
+                        eval "extra_args=($user_args)"
+                        echo "Executing with arguments: ${extra_args[*]}"
+                    fi
+                fi
                 cd "$(dirname "$target_dir")" || return 1
-                "$target_dir"
+                "$target_dir" "${extra_args[@]}"
                 return $?
             else
                 echo "File execution cancelled."
@@ -166,11 +184,24 @@ dev() {
                         return 1
                     }
                     echo "File created: $target_dir"
+                    if [ ${#extra_args[@]} -gt 0 ]; then
+                        echo "With arguments: ${extra_args[*]}"
+                    fi
                     echo -n "Do you want to execute this file? [y/N]: "
                     read -r exec_response
                     if [[ "$exec_response" =~ ^[Yy]$ ]]; then
+                        # Ask for arguments if none were provided
+                        if [ ${#extra_args[@]} -eq 0 ]; then
+                            echo -n "Enter arguments (or press Enter for none): "
+                            read -r user_args
+                            if [ -n "$user_args" ]; then
+                                # Split user input into array
+                                eval "extra_args=($user_args)"
+                                echo "Executing with arguments: ${extra_args[*]}"
+                            fi
+                        fi
                         cd "$(dirname "$target_dir")" || return 1
-                        "$target_dir"
+                        "$target_dir" "${extra_args[@]}"
                         return $?
                     else
                         cd "$(dirname "$target_dir")" || return 1
