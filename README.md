@@ -40,6 +40,22 @@ dev script.sh
 # → Asks for confirmation, then executes ~/dev/script.sh
 ```
 
+Execute a file with arguments:
+
+```bash
+dev test.sh -ac --verbose
+# → Target is a file: ~/dev/test.sh
+# → With arguments: -ac --verbose
+# → Do you want to execute this file? [y/N]: y
+# → Executes: ~/dev/test.sh -ac --verbose
+
+# Or interactively:
+dev test.sh
+# → Do you want to execute this file? [y/N]: y
+# → Enter arguments (or press Enter for none): -ac --verbose
+# → Executing with arguments: -ac --verbose
+```
+
 Open a file in editor:
 
 ```bash
@@ -264,6 +280,31 @@ dev script.sh
 # → Do you want to execute this file? [y/N]: y
 # → Executes the file and navigates to its directory
 ```
+
+**With arguments:**
+```bash
+dev deploy.sh --env production --force
+# → Target is a file: ~/dev/deploy.sh
+# → With arguments: --env production --force
+# → Do you want to execute this file? [y/N]: y
+# → Executes: ./deploy.sh --env production --force
+```
+
+**Interactive argument input:**
+```bash
+dev script.sh
+# → Target is a file: ~/dev/script.sh
+# → Do you want to execute this file? [y/N]: y
+# → Enter arguments (or press Enter for none): -v --debug
+# → Executing with arguments: -v --debug
+# → Executes: ./script.sh -v --debug
+```
+
+**Use cases:**
+- Run scripts with flags: `dev test.sh -v`
+- Pass configuration: `dev build.sh --config prod`
+- Multiple arguments: `dev script.sh arg1 arg2 arg3`
+- Interactive mode: `dev script.sh` → then enter arguments when prompted
 
 ### File Editing
 Use the `-o` flag to open files directly in your configured editor:
